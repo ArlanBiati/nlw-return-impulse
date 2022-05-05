@@ -6,6 +6,7 @@ import thoughtImageUrl from '../../assets/thought.svg';
 
 import { FeedbackTypeStep } from "./Steps/FeedbackTypeStep";
 import { FeedbackContentStep } from "./Steps/FeedbackContentStep";
+import { FeedbackSuccessStep } from "./Steps/FeedbackSuccessStep";
 
 export const feedbackTypes = {
   BUG: {
@@ -35,9 +36,11 @@ export type FeedbackType = keyof typeof feedbackTypes;
 
 export function WidgetForm() {
   const [feedbackType, setFeedbackType] = useState<FeedbackType | null>(null);
+  const [feedbackSent, setFeedbackSent] = useState(false);
 
   function handlesRestartFeedback() {
     setFeedbackType(null);
+    setFeedbackSent(false);
   }
 
   return (
@@ -57,19 +60,31 @@ export function WidgetForm() {
       "
     >
 
-      {
-        !feedbackType ? (
-          <FeedbackTypeStep onFeedbackTypeChanged={setFeedbackType} />
-        ) : (
-          <FeedbackContentStep
-            feedbackType={feedbackType}
-            onFeedbackRestartRequested={handlesRestartFeedback}
-          />
-        )
-      }
+      { feedbackSent ? (
+        <FeedbackSuccessStep
+          onFeedbackRestartRequested={handlesRestartFeedback}
+        />
+      ) : (
+        <>
+          {
+            !feedbackType ? (
+              <FeedbackTypeStep onFeedbackTypeChanged={setFeedbackType} />
+            ) : (
+              <FeedbackContentStep
+                feedbackType={feedbackType}
+                onFeedbackRestartRequested={handlesRestartFeedback}
+                onFeedbackSent={() => setFeedbackSent(true)}
+              />
+            )
+          }
+        </>
+      ) }
 
       <footer className="text-xs text-neutral-400">
-        Feito com 💜 pela <a className="underline underline-offset-2" href="https://www.rocketseat.com.br">Rocketseat</a>
+        Feito com 💜 pela
+          <a className="underline underline-offset-2" href="https://www.rocketseat.com.br">
+            Rocketseat
+          </a>
       </footer>
     </div>
   )

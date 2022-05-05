@@ -1,14 +1,37 @@
+import { FormEvent, useState } from "react";
 import { ArrowLeft } from "phosphor-react";
 import { FeedbackType, feedbackTypes } from "..";
 import { CloseButton } from "../../CloseButton"
+import { ScreenshotButton } from "../ScreenshotButton";
 
 interface FeedbackContentStepProps {
   feedbackType: FeedbackType;
   onFeedbackRestartRequested: () => void;
+  onFeedbackSent: () => void;
 }
 
-export function FeedbackContentStep({ feedbackType, onFeedbackRestartRequested }: FeedbackContentStepProps) {
-  const feedbackTypeInfo = feedbackTypes[feedbackType]
+export function FeedbackContentStep({
+  feedbackType,
+  onFeedbackRestartRequested,
+  onFeedbackSent
+}: FeedbackContentStepProps) {
+
+  const [screenshot, setScreenshot] = useState<string | null>(null);
+  const [comment, setComment] = useState('');
+
+  const feedbackTypeInfo = feedbackTypes[feedbackType];
+
+  function handleSubmitFeedback(event: FormEvent) {
+    event.preventDefault();
+
+    console.log({
+      screenshot,
+      comment
+    })
+
+    onFeedbackSent();
+  }
+
   return (
     <>
       <header>
@@ -31,7 +54,7 @@ export function FeedbackContentStep({ feedbackType, onFeedbackRestartRequested }
         <CloseButton />
       </header>
 
-      <form className="my-4 w-full">
+      <form className="my-4 w-full" onSubmit={handleSubmitFeedback}>
         <textarea
           className="
             min-w-[304px]
@@ -50,9 +73,16 @@ export function FeedbackContentStep({ feedbackType, onFeedbackRestartRequested }
             scrollbar-thumb-zinc-700
             scrollbar-track-transparent
           "
-          placeholder="Conte com detalhes o que está acontecendo..." />
+          placeholder="Conte com detalhes o que está acontecendo..."
+          onChange={event => setComment(event.target.value)}
+        />
 
           <footer className="flex gap-2 m-2">
+            <ScreenshotButton
+              screenshot={screenshot}
+              onScreenshotTook={setScreenshot}
+            />
+
             <button
               type="submit"
               className="
@@ -71,7 +101,12 @@ export function FeedbackContentStep({ feedbackType, onFeedbackRestartRequested }
                 focus:ring-offset-2
                 focus:ring-offset-zinc-900
                 focus:ring-brand-500
-                transition-colors"
+                transition-colors
+
+                disabled:opacity-50
+                disabled:hover:bg-brand-500
+              "
+              disabled={comment.length === 0}
             >
               Enviar Feedback
             </button>

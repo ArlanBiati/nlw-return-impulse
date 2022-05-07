@@ -41,7 +41,8 @@ export const TitleText = styled.Text`
 export const Input = styled.TextInput.attrs({
   multiline: true,
   placeholder: 'Algo não está funcionando bem? Queremos corrigir. Conte com detalhes o que está acontecendo.',
-  placeholderTextColor: theme.colors.text_secondary
+  placeholderTextColor: theme.colors.text_secondary,
+  autoCorrect: false
 })`
   height: 112px;
   width: 100%;

@@ -12,12 +12,16 @@ import {
   ButtonTitle
 } from './styles';
 
-export function Success(){
+interface SuccessProps {
+  onSendAnotherFeedback: () => void;
+}
+
+export function Success({ onSendAnotherFeedback }: SuccessProps){
   return (
     <Container>
       <SuccessImage source={successImg}/>
       <Title>Agradecemos o feedback</Title>
-      <Button>
+      <Button onPress={onSendAnotherFeedback}>
         <ButtonTitle>
           Quero enviar outro feedbakc
         </ButtonTitle>

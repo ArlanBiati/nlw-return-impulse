@@ -14,7 +14,7 @@ interface OptionProps extends TouchableOpacityProps {
 
 export function Option({ title, image, ...rest }: OptionProps){
   return (
-    <Container {...rest} onPress={() => {}}>
+    <Container {...rest}>
       <OptionImage source={image} />
       <OptionTitle>
         {title}
